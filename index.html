@@ -6,44 +6,89 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: "Poppins", Arial, sans-serif;
       background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       min-height: 100vh;
       text-align: center;
-      color: #fff;
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
     }
 
     .message {
       font-size: 1.2rem;
       margin: 20px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.9);
       padding: 15px;
       border-radius: 12px;
       max-width: 600px;
+      color: #333;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
     img {
-      width: 300px;
+      width: 280px;
       border-radius: 12px;
-      margin-top: 20px;
+      margin-top: 15px;
       box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
     }
 
     #timer {
-      font-size: 1.5rem;
-      margin-top: 20px;
-      background: rgba(255,255,255,0.2);
-      padding: 15px;
-      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 15px;
+    }
+
+    .time-box {
+      background: #fff;
+      color: #333;
+      padding: 15px 20px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      min-width: 100px;
+    }
+
+    .time-box h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #ff6f61;
+    }
+
+    .time-box span {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* Bolhas animadas */
+    .bubble {
+      position: absolute;
+      bottom: -100px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      animation: rise 10s infinite ease-in;
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      to {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -56,40 +101,72 @@
 
   <img src="9303e061-e212-4fcc-8cec-3abc17468779.png" alt="Primeira mensagem">
 
-  <div id="timer"></div>
+  <div id="timer">
+    <div class="time-box"><h2 id="years">0</h2><span>Anos</span></div>
+    <div class="time-box"><h2 id="months">0</h2><span>Meses</span></div>
+    <div class="time-box"><h2 id="weeks">0</h2><span>Semanas</span></div>
+    <div class="time-box"><h2 id="days">0</h2><span>Dias</span></div>
+    <div class="time-box"><h2 id="hours">0</h2><span>Horas</span></div>
+    <div class="time-box"><h2 id="minutes">0</h2><span>Minutos</span></div>
+    <div class="time-box"><h2 id="seconds">0</h2><span>Segundos</span></div>
+  </div>
 
   <script>
+    const startDate = new Date("2023-02-18T18:54:00");
+
     function updateTimer() {
-      const startDate = new Date("2023-02-18T18:54:00");
       const now = new Date();
-      let diff = now - startDate;
+      let diff = Math.floor((now - startDate) / 1000); // diferença em segundos
 
-      // Conversões
-      const seconds = Math.floor(diff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-      const weeks = Math.floor(days / 7);
+      const years = Math.floor(diff / (365 * 24 * 60 * 60));
+      diff -= years * 365 * 24 * 60 * 60;
 
-      // Aproximação de meses e anos
-      const years = Math.floor(days / 365);
-      const months = Math.floor(days / 30.44); // média de dias no mês
+      const months = Math.floor(diff / (30 * 24 * 60 * 60));
+      diff -= months * 30 * 24 * 60 * 60;
 
-      const display = `
-        ${years} anos <br>
-        ${months} meses <br>
-        ${weeks} semanas <br>
-        ${days} dias <br>
-        ${hours % 24} horas <br>
-        ${minutes % 60} minutos <br>
-        ${seconds % 60} segundos
-      `;
+      const weeks = Math.floor(diff / (7 * 24 * 60 * 60));
+      diff -= weeks * 7 * 24 * 60 * 60;
 
-      document.getElementById("timer").innerHTML = display;
+      const days = Math.floor(diff / (24 * 60 * 60));
+      diff -= days * 24 * 60 * 60;
+
+      const hours = Math.floor(diff / (60 * 60));
+      diff -= hours * 60 * 60;
+
+      const minutes = Math.floor(diff / 60);
+      diff -= minutes * 60;
+
+      const seconds = diff;
+
+      document.getElementById("years").textContent = years;
+      document.getElementById("months").textContent = months;
+      document.getElementById("weeks").textContent = weeks;
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
     }
 
     setInterval(updateTimer, 1000);
     updateTimer();
+
+    // Criar bolhas animadas
+    function createBubble() {
+      const bubble = document.createElement("div");
+      bubble.classList.add("bubble");
+      const size = Math.random() * 40 + 10 + "px";
+      bubble.style.width = size;
+      bubble.style.height = size;
+      bubble.style.left = Math.random() * window.innerWidth + "px";
+      bubble.style.animationDuration = (Math.random() * 10 + 5) + "s";
+      document.body.appendChild(bubble);
+
+      setTimeout(() => {
+        bubble.remove();
+      }, 15000);
+    }
+
+    setInterval(createBubble, 500);
   </script>
 </body>
 </html>
