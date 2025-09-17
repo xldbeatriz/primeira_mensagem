@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nosso Tempo 💙</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 1.2rem;
+      margin: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 12px;
+      max-width: 600px;
+    }
+
+    img {
+      width: 300px;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+    }
+
+    #timer {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>⏳ Nosso tempo juntos 💕</h1>
+  <div class="message">
+    E pensar que uma simples mensagem de brincadeira <br>
+    eu ganharia a melhor companhia do mundo 💙
+  </div>
+
+  <img src="9303e061-e212-4fcc-8cec-3abc17468779.png" alt="Primeira mensagem">
+
+  <div id="timer"></div>
+
+  <script>
+    function updateTimer() {
+      const startDate = new Date("2023-02-18T18:54:00");
+      const now = new Date();
+      let diff = now - startDate;
+
+      // Conversões
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      const weeks = Math.floor(days / 7);
+
+      // Aproximação de meses e anos
+      const years = Math.floor(days / 365);
+      const months = Math.floor(days / 30.44); // média de dias no mês
+
+      const display = `
+        ${years} anos <br>
+        ${months} meses <br>
+        ${weeks} semanas <br>
+        ${days} dias <br>
+        ${hours % 24} horas <br>
+        ${minutes % 60} minutos <br>
+        ${seconds % 60} segundos
+      `;
+
+      document.getElementById("timer").innerHTML = display;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
+</body>
+</html>
